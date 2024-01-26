@@ -1,7 +1,7 @@
 -- Create a new database called 'portfolio'
-CREATE DATABASE portfolio;
+CREATE DATABASE orange_portfolio;
 
-USE portfolio;
+USE orange_portfolio;
 
 -- Criação da Tabela images
 CREATE TABLE
