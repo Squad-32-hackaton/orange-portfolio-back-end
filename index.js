@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
-app.use("/users", userRoutes);
+app.use("/", userRoutes);
 
 db.connect((err) => {
     if (err) {
