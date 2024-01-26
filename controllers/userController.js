@@ -1,12 +1,13 @@
 import User from "../models/userModel.js";
 import { z } from "zod";
+import bcrypt from "bcrypt";
 
 import { PrismaClient } from "@prisma/client";
 
-const PRISMA = new PrismaClient();
+const prisma = new PrismaClient();
 
 export async function getUsers(req, res) {
-    let users = await PRISMA.users.findMany();
+    const users = await prisma.users.findMany();
 
     res.json(users);
 }
@@ -20,10 +21,14 @@ export async function addUser(req, res) {
         password: z.string(),
         avatar: z.string(),
     });
-    let body = userSchema.safeParse(req.body);
-    console.log(body);
+    const dataUser = req.body;
+
+    dataUser.password = await bcrypt.hash(dataUser.password, 10);
+
+    const body = userSchema.safeParse(dataUser);
+
     if (body.success) {
-        let user = await PRISMA.users.create({ data: body.data });
+        const user = await prisma.users.create({ data: body.data });
 
         res.status(201).json(user);
     } else {
