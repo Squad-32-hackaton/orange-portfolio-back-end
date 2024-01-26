@@ -20,6 +20,8 @@ model Users {
     createdAt  DateTime   @default(now())
     updatedAt  DateTime   @updatedAt
     Projects   Projects[]
+
+    @@index([email])
 }
 
 model Projects {
