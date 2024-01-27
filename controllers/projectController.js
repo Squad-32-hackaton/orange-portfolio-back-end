@@ -6,11 +6,28 @@ export async function create(req, res) {
     const { id: user_id } = req.params;
 
     const projectSchema = z.object({
-        title: z.string(),
-        description: z.string(),
-        link: z.string(),
-        tags: z.string().array(),
-        image_id: z.number(),
+        title: z.string({
+            required_error: "Field 'title' is required",
+            invalid_type_error: "Field 'title' must be a string",
+        }),
+        description: z.string({
+            required_error: "Field 'description' is required",
+            invalid_type_error: "Field 'description' must be a string",
+        }),
+        link: z.string({
+            required_error: "Field 'link' is required",
+            invalid_type_error: "Field 'link' must be a string",
+        }),
+        tags: z
+            .string({
+                required_error: "Field 'tags' is required",
+                invalid_type_error: "Field 'tags' must be a string array",
+            })
+            .array(),
+        image_id: z.number({
+            required_error: "Field 'image_id' is required",
+            invalid_type_error: "Field 'image_id' must be a number",
+        }),
     });
 
     const body = projectSchema.safeParse(req.body);
@@ -29,7 +46,7 @@ export async function create(req, res) {
     if (!project)
         return res
             .status(409)
-            .json({ error: "Não foi possível cadastrar o projeto" });
+            .json({ error: "Error when trying to register the project" });
 
     const tagsData = body.data.tags.map((tag) => ({
         name: tag,
@@ -40,7 +57,7 @@ export async function create(req, res) {
     if (!tags)
         return res
             .status(409)
-            .json({ error: "Não foi possível cadastrar as tags" });
+            .json({ error: "Error when trying to register the tags" });
 
     const projectResponse = {
         ...project,
