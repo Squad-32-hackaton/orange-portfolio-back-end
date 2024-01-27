@@ -2,12 +2,20 @@ import User from "../models/userModel.js";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function getUsers(req, res) {
-    const users = await prisma.users.findMany();
+    const users = await prisma.users.findMany({
+        select: {
+            user_id: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+            avatar: true,
+        },
+    });
 
     res.json(users);
 }
@@ -25,14 +33,25 @@ export async function addUser(req, res) {
 
     dataUser.password = await bcrypt.hash(dataUser.password, 10);
 
+    dataUser.email = dataUser.email.toLowerCase();
+
     const body = userSchema.safeParse(dataUser);
 
-    if (body.success) {
-        const user = await prisma.users.create({ data: body.data });
+    try {
+        if (body.success) {
+            const user = await prisma.users.create({ data: body.data });
 
-        res.status(201).json(user);
-    } else {
-        // melhorar saída do erro
-        res.status(400).json({ Erro: "Dados Inválidos!" });
+            res.status(201).json(user);
+        }
+    } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === "P2002") {
+                return res.status(409).json({
+                    status: "fail",
+                    message:
+                        "Email already exist, please use another email address",
+                });
+            }
+        }
     }
 }
