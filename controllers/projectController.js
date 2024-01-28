@@ -62,3 +62,15 @@ export async function create(req, res) {
         res.status(400).json({ error: error.message });
     }
 }
+
+export async function getAllUserProjects(req, res) {
+    const { id: user_id } = req.params;
+    try {
+        const projects = await projectService.getAllUserProjects(
+            parseInt(user_id),
+        );
+        return res.json({ projects });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
