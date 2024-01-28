@@ -1,8 +1,10 @@
+import "express-async-errors";
 import express from "express";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/userRoutes.js";
 
 import db from "./db.js";
+import errorMiddleware from "./middlewares/errorMiddleware.js";
 
 const app = express();
 const port = 3000;
@@ -17,6 +19,8 @@ db.connect((err) => {
         console.log("Conectado ao MySQL!");
     }
 });
+
+app.use(errorMiddleware);
 
 app.listen(port, () =>
     console.log(
