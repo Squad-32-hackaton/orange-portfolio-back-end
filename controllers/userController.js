@@ -1,5 +1,4 @@
-import User from "../models/userModel.js";
-import { z } from "zod";
+import userSchema from "../zodSchemas/userSchema.js";
 import bcrypt from "bcrypt";
 
 import { PrismaClient, Prisma } from "@prisma/client";
@@ -12,8 +11,9 @@ export async function getUsers(req, res) {
             user_id: true,
             first_name: true,
             last_name: true,
-            email: true,
             avatar: true,
+            email: true,
+            password: true,
         },
     });
 
@@ -21,14 +21,6 @@ export async function getUsers(req, res) {
 }
 
 export async function addUser(req, res) {
-    //validação dos dados com ZOD
-    const userSchema = z.object({
-        first_name: z.string(),
-        last_name: z.string(),
-        email: z.string(),
-        password: z.string(),
-        avatar: z.string(),
-    });
     const dataUser = req.body;
 
     dataUser.password = await bcrypt.hash(dataUser.password, 10);
@@ -41,7 +33,7 @@ export async function addUser(req, res) {
         if (body.success) {
             const user = await prisma.users.create({ data: body.data });
 
-            res.status(201).json(user);
+            res.status(201).json("Cadastro Feito com sucesso");
         }
     } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
