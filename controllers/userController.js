@@ -1,4 +1,3 @@
-import User from "../models/userModel.js";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 
