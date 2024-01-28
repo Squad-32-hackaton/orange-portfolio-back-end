@@ -50,10 +50,7 @@ model Tags {
 }
 
 model Images {
-    image_id   Int        @id @default(autoincrement())
-    title      String     @db.VarChar(50)
-    url        String
-    created_at DateTime   @default(now())
-    updated_at DateTime   @updatedAt
-    Projects   Projects[]
+    image_id Int        @id @default(autoincrement())
+    filename String     @db.VarChar(100)
+    Projects Projects[]
 }
