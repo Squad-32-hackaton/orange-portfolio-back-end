@@ -1,4 +1,4 @@
-import { z } from "zod";
+import userSchema from "../zodSchemas/userSchema.js";
 import bcrypt from "bcrypt";
 
 import { PrismaClient, Prisma } from "@prisma/client";
