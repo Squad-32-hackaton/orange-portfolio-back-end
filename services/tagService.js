@@ -6,6 +6,6 @@ export async function createMany(tags) {
     try {
         return await prisma.tags.createMany({ data: tags });
     } catch (error) {
-        return false;
+        throw new Error("Error when trying to register the tags");
     }
 }

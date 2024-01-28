@@ -42,27 +42,23 @@ export async function create(req, res) {
         tags: undefined,
     };
 
-    const project = await projectService.create(projectData);
-    if (!project)
-        return res
-            .status(409)
-            .json({ error: "Error when trying to register the project" });
+    try {
+        const project = await projectService.create(projectData);
 
-    const tagsData = body.data.tags.map((tag) => ({
-        name: tag,
-        project_id: project.project_id,
-    }));
+        const tagsData = body.data.tags.map((tag) => ({
+            name: tag,
+            project_id: project.project_id,
+        }));
 
-    const tags = await tagService.createMany(tagsData);
-    if (!tags)
-        return res
-            .status(409)
-            .json({ error: "Error when trying to register the tags" });
+        await tagService.createMany(tagsData);
 
-    const projectResponse = {
-        ...project,
-        tags: body.data.tags,
-    };
+        const projectResponse = {
+            ...project,
+            tags: body.data.tags,
+        };
 
-    res.status(201).json({ project: projectResponse });
+        res.status(201).json({ project: projectResponse });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 }
