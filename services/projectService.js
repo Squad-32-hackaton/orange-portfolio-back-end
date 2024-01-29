@@ -31,8 +31,6 @@ export async function getAllUserProjects(user_id) {
         return await prisma.projects.findMany({
             select: {
                 project_id: true,
-                title: true,
-                description: true,
                 link: true,
                 Tags: {
                     select: { name: true },
