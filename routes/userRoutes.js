@@ -10,6 +10,11 @@ router.get("/users", getUsers);
 // Criação de um usuário
 router.post("/user", addUser);
 
+// Home
+router.get("/",(req,res)=>{
+    res.json("home Page")
+}); 
+
 // Rota de login
 router.post("/login", loginUser);
 
@@ -17,6 +22,6 @@ router.post("/login", loginUser);
 router.use(authMiddleware);
 
 //profile
-router.post("/profile", getProfile);
+router.get("/login/profile", getProfile);
 
 export default router;
