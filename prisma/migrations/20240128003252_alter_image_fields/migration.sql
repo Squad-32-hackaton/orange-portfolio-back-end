@@ -1,11 +1,9 @@
 -- AlterTable
-ALTER TABLE `images`
-    ADD COLUMN `filename` VARCHAR(100);
+ALTER TABLE `Images` ADD COLUMN `filename` VARCHAR(100);
 
-UPDATE `images`
-    SET `filename` = `title`;
+UPDATE `Images` SET `filename` = `title`;
 
-ALTER TABLE `images`
+ALTER TABLE `Images`
     DROP COLUMN `created_at`,
     DROP COLUMN `title`,
     DROP COLUMN `updated_at`,
