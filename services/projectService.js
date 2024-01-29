@@ -25,3 +25,22 @@ export async function create(data) {
         throw new Error("Error when trying to register the project");
     }
 }
+
+export async function getAllUserProjects(user_id) {
+    try {
+        return await prisma.projects.findMany({
+            select: {
+                project_id: true,
+                link: true,
+                Tags: {
+                    select: { name: true },
+                },
+                image: true,
+                createdAt: true,
+            },
+            where: { user_id },
+        });
+    } catch (error) {
+        throw new Error("Error when trying to search user projects");
+    }
+}
