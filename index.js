@@ -19,9 +19,9 @@ app.use("/images", express.static("uploads"));
 
 db.connect((err) => {
     if (err) {
-        console.error("Erro ao conectar ao MySQL:", err);
+        console.error("Erro ao conectar ao Banco de dados!:", err);
     } else {
-        console.log("Conectado ao MySQL!");
+        console.log("Conectado ao Banco de dados!");
     }
 });
 
