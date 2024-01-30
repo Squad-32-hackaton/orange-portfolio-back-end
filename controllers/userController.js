@@ -11,7 +11,7 @@ export async function getUsers(req, res) {
             user_id: true,
             first_name: true,
             last_name: true,
-            avatar: true,
+            avatar_id: true,
             email: true,
             password: true,
         },
