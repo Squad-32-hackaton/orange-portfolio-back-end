@@ -11,6 +11,8 @@ import projectRoutes from "./routes/projectRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import db from "./db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger.json" assert { type: "json" };
 
 const app = express();
 
@@ -29,6 +31,7 @@ db.connect((err) => {
     }
 });
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(errorMiddleware);
 
 function startServer(port, server) {
