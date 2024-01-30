@@ -5,8 +5,9 @@
     "type": "module",
     "main": "nodemon index.js",
     "scripts": {
-        "dev": "nodemon index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "pm2 start index.js",
+        "stop": "pm2 stop 'all'",
+        "dev": "nodemon index.js"
     },
     "author": "",
     "license": "ISC",
