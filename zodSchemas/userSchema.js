@@ -5,6 +5,6 @@ const userSchema = z.object({
     last_name: z.string(),
     email: z.string(),
     password: z.string(),
-    avatar: z.string(),
+    avatar_id: z.number().optional(),
 });
 export default userSchema;
