@@ -16,10 +16,11 @@ model Users {
     last_name  String     @db.VarChar(50)
     email      String     @unique @db.VarChar(50)
     password   String
-    avatar     String?
+    avatar_id  Int?
     createdAt  DateTime   @default(now())
     updatedAt  DateTime   @updatedAt
     Projects   Projects[]
+    avatar     Images?     @relation(fields: [avatar_id], references: [image_id])
 
     @@index([email])
 }
@@ -53,4 +54,5 @@ model Images {
     image_id Int        @id @default(autoincrement())
     filename String     @db.VarChar(100)
     Projects Projects[]
+    Users    Users[]
 }
