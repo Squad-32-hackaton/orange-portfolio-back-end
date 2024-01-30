@@ -100,7 +100,7 @@
                                         "type": "string",
                                         "required": true
                                     },
-                                    "avatar": {
+                                    "avatar_id": {
                                         "type": "number",
                                         "required": true
                                     },
@@ -116,7 +116,7 @@
                                         "first_name": "Tiago",
                                         "last_name": "Lopes",
                                         "email": "tiagolopes@gmail.com",
-                                        "avatar": 1,
+                                        "avatar_id": 1,
                                         "password": "Senha123"
                                     }
                                 }
@@ -169,7 +169,7 @@
                                             "user_id": 1,
                                             "first_name": "Tiago",
                                             "last_name": "Lopes",
-                                            "avatar": "1",
+                                            "avatar_id": 1,
                                             "email": "tiagoltavares2002@gmail.com",
                                             "password": "$2b$10$bDtGRy7kPGblE4i.5DkgverwjJqEUJeWV/5ceD2hSAezGJD2N8bee"
                                         },
@@ -177,7 +177,7 @@
                                             "user_id": 2,
                                             "first_name": "Matheus",
                                             "last_name": "Santos",
-                                            "avatar": "1",
+                                            "avatar_id": 1,
                                             "email": "teste@gmail.com",
                                             "password": "$2b$10$wtsKznaPZgPATxJC9vJK..IaRybabQRwn8eV/gA.87Hn35jJlbGU2"
                                         }
