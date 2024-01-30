@@ -12,7 +12,7 @@
         },
         {
             "url": "http://localhost:3000",
-            "description": "test"
+            "description": "development"
         }
     ],
     "paths": {
@@ -189,10 +189,15 @@
                 }
             }
         },
-        "/users/{id}": {
-            "get": {
-                "summary": "Busca usuário",
-                "description": "Faz a busca de um usuário pelo ID",
+        "/users/{id}/projects": {
+            "post": {
+                "summary": "Cadastro de projetos",
+                "description": "Cadastra projetos de um usuário",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -204,37 +209,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "usuário encontrado com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "example": {
-                                        "user": {
-                                            "id": 8,
-                                            "name": "Victor Piloto",
-                                            "email": "vp123@gmail.com",
-                                            "password": "e7d80ffeefa212b7c5c5e",
-                                            "createdAt": "2023-07-09T17:30:34.000Z",
-                                            "updatedAt": "2023-07-09T17:30:34.000Z"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Usuário não encontrado"
-                    }
-                }
-            }
-        },
-        "/users/{id}/projects": {
-            "post": {
-                "summary": "Cadastro de projetos",
-                "description": "Cadastra projetos de um usuário",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -329,6 +303,11 @@
             "get": {
                 "summary": "Busca todos os projetos de um usuário",
                 "description": "Lista todos os projetos de um usuário buscando pelo ID do usuário.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -373,6 +352,16 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "description": "Autenticação utilizando JWT",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
