@@ -1,4 +1,5 @@
 import "express-async-errors";
+import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/userRoutes.js";
@@ -12,6 +13,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 app.use("/", userRoutes);
 app.use("/", projectRoutes);
 app.use("/", uploadRoutes);
