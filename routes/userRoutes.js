@@ -11,17 +11,14 @@ router.get("/users", getUsers);
 router.post("/user", addUser);
 
 // Home
-router.get("/",(req,res)=>{
-    res.json("home Page")
-}); 
+router.get("/", (_, res) => {
+    res.json({ message: "API running successfully" });
+});
 
 // Rota de login
 router.post("/login", loginUser);
 
-// A partir daqui todas as rotas estão protegidas por Middleware
-router.use(authMiddleware);
-
 //profile
-router.get("/login/profile", getProfile);
+router.get("/login/profile", authMiddleware, getProfile);
 
 export default router;

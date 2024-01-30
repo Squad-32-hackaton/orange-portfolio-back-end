@@ -1,0 +1,368 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Orange Portfolio API",
+        "description": "API da aplicação Orange Portfolio para cadastro de projetos de usuários",
+        "version": "0.1.0"
+    },
+    "servers": [
+        {
+            "url": "https://orangeportfoliosquad32.software",
+            "description": "production"
+        },
+        {
+            "url": "http://localhost:3000",
+            "description": "development"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Login",
+                "description": "Faz o login do usuário no sistema",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "required": true
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "login válido": {
+                                    "value": {
+                                        "email": "testes@gmail",
+                                        "password": "senha123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "login com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "user": {
+                                            "user_id": 1
+                                        },
+                                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJpTkkMW31yNw"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Senha incorreta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Email ou senha Inválidos!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "summary": "Cadastro de usuários",
+                "description": "Cadastra usuários no sistema",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "avatar_id": {
+                                        "type": "number",
+                                        "required": true
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "required": true
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "usuário": {
+                                    "value": {
+                                        "first_name": "Tiago",
+                                        "last_name": "Lopes",
+                                        "email": "tiagolopes@gmail.com",
+                                        "avatar_id": 1,
+                                        "password": "Senha123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "cadastro efetuado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Cadastro Feito com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "E-mail repetido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "status": "fail",
+                                        "message": "Email already exist, please use another email address"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "Busca todos os usuários",
+                "description": "Faz a busca de todos os usuários do sistema",
+                "responses": {
+                    "200": {
+                        "description": "usuário encontrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": [
+                                        {
+                                            "user_id": 1,
+                                            "first_name": "Tiago",
+                                            "last_name": "Lopes",
+                                            "avatar_id": 1,
+                                            "email": "tiagoltavares2002@gmail.com",
+                                            "password": "$2b$10$bDtGRy7kPGblE4i.5DkgverwjJqEUJeWV/5ceD2hSAezGJD2N8bee"
+                                        },
+                                        {
+                                            "user_id": 2,
+                                            "first_name": "Matheus",
+                                            "last_name": "Santos",
+                                            "avatar_id": 1,
+                                            "email": "teste@gmail.com",
+                                            "password": "$2b$10$wtsKznaPZgPATxJC9vJK..IaRybabQRwn8eV/gA.87Hn35jJlbGU2"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/projects": {
+            "post": {
+                "summary": "Cadastro de projetos",
+                "description": "Cadastra projetos de um usuário",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "tags": {
+                                        "type": "object",
+                                        "required": true
+                                    },
+                                    "image_id": {
+                                        "type": "number",
+                                        "required": true
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "usuário": {
+                                    "value": {
+                                        "title": "Teste de projeto",
+                                        "description": "Teste de novo projeto",
+                                        "link": "https://github.com/Squad-32-hackaton",
+                                        "tags": [
+                                            "front-end",
+                                            "mobile"
+                                        ],
+                                        "image_id": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "cadastro efetuado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "project": {
+                                            "project_id": 1,
+                                            "user_id": 1,
+                                            "title": "Teste de projeto",
+                                            "description": "Teste de novo projeto",
+                                            "image_id": 1,
+                                            "link": "https://github.com/Squad-32-hackaton",
+                                            "createdAt": "2024-01-29T23:42:46.165Z",
+                                            "updatedAt": "2024-01-29T23:42:46.165Z",
+                                            "tags": [
+                                                "front-end",
+                                                "mobile"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "errors": [
+                                            "Field 'description' is required",
+                                            "Field 'link' must be a string",
+                                            "Field 'tags' must be a string array",
+                                            "Field 'image_id' must be a number"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Busca todos os projetos de um usuário",
+                "description": "Lista todos os projetos de um usuário buscando pelo ID do usuário.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "projetos retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "projects": [
+                                            {
+                                                "project_id": 1,
+                                                "link": "https://github.com/Squad-32-hackaton",
+                                                "Tags": [
+                                                    {
+                                                        "name": "front-end"
+                                                    },
+                                                    {
+                                                        "name": "mobile"
+                                                    }
+                                                ],
+                                                "image": {
+                                                    "image_id": 1,
+                                                    "filename": "1706481307449_frontend.png"
+                                                },
+                                                "createdAt": "2024-01-29T23:42:46.165Z"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "description": "Autenticação utilizando JWT",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
