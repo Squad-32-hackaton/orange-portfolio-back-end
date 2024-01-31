@@ -424,6 +424,103 @@
                     }
                 }
             }
+        },
+        "/users/{user_id}/searchProjects": {
+            "get": {
+                "summary": "Filtra projetos do usuário por tag",
+                "description": "Exibe todos os projetos do usuário que contém uma tag específica",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "description": "Tag que os projetos devem conter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "projetos contendo a tag retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "projects": [
+                                            {
+                                                "project_id": 5,
+                                                "link": "https://orangeportfoliosquad32.software",
+                                                "Tags": [
+                                                    {
+                                                        "name": "Front-end"
+                                                    },
+                                                    {
+                                                        "name": "Back-end"
+                                                    }
+                                                ],
+                                                "image": {
+                                                    "image_id": 1,
+                                                    "filename": "1706654310565_api.png"
+                                                },
+                                                "createdAt": "2024-01-31T00:44:04.509Z"
+                                            },
+                                            {
+                                                "project_id": 1,
+                                                "link": "https://github.com/Squad-32-hackaton",
+                                                "Tags": [
+                                                    {
+                                                        "name": "front-end"
+                                                    },
+                                                    {
+                                                        "name": "mobile"
+                                                    }
+                                                ],
+                                                "image": {
+                                                    "image_id": 1,
+                                                    "filename": "1706654310565_api.png"
+                                                },
+                                                "createdAt": "2024-01-30T22:57:33.861Z"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "errors": [
+                                            "Param 'user_id' must be a number",
+                                            "Query string 'tag' is required"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
