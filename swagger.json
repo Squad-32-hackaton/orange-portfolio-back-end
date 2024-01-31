@@ -205,7 +205,7 @@
                         "description": "ID do usuário",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "number"
                         }
                     }
                 ],
@@ -242,10 +242,7 @@
                                         "title": "Teste de projeto",
                                         "description": "Teste de novo projeto",
                                         "link": "https://github.com/Squad-32-hackaton",
-                                        "tags": [
-                                            "front-end",
-                                            "mobile"
-                                        ],
+                                        "tags": ["front-end", "mobile"],
                                         "image_id": 1
                                     }
                                 }
@@ -270,10 +267,7 @@
                                             "link": "https://github.com/Squad-32-hackaton",
                                             "createdAt": "2024-01-29T23:42:46.165Z",
                                             "updatedAt": "2024-01-29T23:42:46.165Z",
-                                            "tags": [
-                                                "front-end",
-                                                "mobile"
-                                            ]
+                                            "tags": ["front-end", "mobile"]
                                         }
                                     }
                                 }
@@ -315,7 +309,7 @@
                         "description": "ID do usuário",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "number"
                         }
                     }
                 ],
@@ -346,6 +340,83 @@
                                                 "createdAt": "2024-01-29T23:42:46.165Z"
                                             }
                                         ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/projects/{id}": {
+            "get": {
+                "summary": "Detalhes de um projeto do usuário",
+                "description": "Exibe todos os detalhes de um projeto do próprio usuário.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do projeto",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "projeto retornado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "project": {
+                                            "project_id": 5,
+                                            "title": "Orange Portfolio",
+                                            "description": "Software para cadastro de projetos",
+                                            "link": "https://orangeportfoliosquad32.software",
+                                            "Tags": [
+                                                {
+                                                    "name": "Front-end"
+                                                },
+                                                {
+                                                    "name": "Back-end"
+                                                }
+                                            ],
+                                            "image": {
+                                                "image_id": 1,
+                                                "filename": "1706654310565_api.png"
+                                            },
+                                            "createdAt": "2024-01-31T00:44:04.509Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "projeto não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Project not found"
                                     }
                                 }
                             }
