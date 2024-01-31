@@ -7,7 +7,6 @@ import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/userRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import db from "./db.js";
@@ -20,15 +19,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/", userRoutes);
-
 app.use("/", projectRoutes);
 app.use("/", uploadRoutes);
 app.use("/images", express.static("uploads"));
-
-app.use("/", authRoutes);
-
-
-
 
 db.connect((err) => {
     if (err) {

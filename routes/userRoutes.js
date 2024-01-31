@@ -19,6 +19,6 @@ router.get("/", (_, res) => {
 router.post("/login", loginUser);
 
 //profile
-// router.get("/login/profile", authMiddleware, getProfile);
+router.get("/login/profile", authMiddleware, getProfile);
 
 export default router;

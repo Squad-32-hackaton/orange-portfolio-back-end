@@ -13,6 +13,7 @@ export async function getUsers(req, res) {
             last_name: true,
             avatar_id: true,
             email: true,
+            password: true,
         },
     });
 
