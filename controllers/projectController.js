@@ -1,4 +1,5 @@
 import projectSchema from "../zodSchemas/projectSchema.js";
+import { z } from "zod";
 import { NotFoundError } from "../helpers/api-errors.js";
 import * as projectService from "../services/projectService.js";
 import * as tagService from "../services/tagService.js";
@@ -53,4 +54,31 @@ export async function getUserProjectById(req, res) {
     if (!project) throw new NotFoundError("Project not found");
 
     return res.json({ project });
+}
+
+export async function getUserProjectsByTag(req, res) {
+    const { id: user_id } = req.params;
+    const { tag } = req.query;
+
+    const paramsScema = z.object({
+        user_id: z.number({
+            invalid_type_error: "Param 'user_id' must be a number",
+        }),
+        tag: z.string({
+            required_error: "Query string 'tag' is required",
+        }),
+    });
+
+    const params = paramsScema.safeParse({ user_id: parseInt(user_id), tag });
+    if (!params.success) {
+        const errors = params.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
+
+    const projects = await projectService.getUserProjectsByTag(
+        params.data.user_id,
+        params.data.tag,
+    );
+
+    return res.json({ projects });
 }

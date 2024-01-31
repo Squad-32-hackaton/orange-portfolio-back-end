@@ -37,6 +37,7 @@ export async function getAllUserProjects(user_id) {
             createdAt: true,
         },
         where: { user_id },
+        orderBy: { project_id: "desc" },
     });
 }
 
@@ -54,5 +55,30 @@ export async function getUserProjectById(user_id, project_id) {
             createdAt: true,
         },
         where: { user_id, project_id },
+    });
+}
+
+export async function getUserProjectsByTag(user_id, tag) {
+    return await prisma.projects.findMany({
+        select: {
+            project_id: true,
+            link: true,
+            Tags: {
+                select: { name: true },
+            },
+            image: true,
+            createdAt: true,
+        },
+        where: {
+            user_id,
+            Tags: {
+                some: {
+                    name: {
+                        contains: tag,
+                    },
+                },
+            },
+        },
+        orderBy: { project_id: "desc" },
     });
 }
