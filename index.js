@@ -13,12 +13,13 @@ import db from "./db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
-
+import authRoutes from "./routes/authRoutes.js";
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/", userRoutes);
+app.use("/", authRoutes);
 app.use("/", projectRoutes);
 app.use("/", uploadRoutes);
 app.use("/images", express.static("uploads"));
