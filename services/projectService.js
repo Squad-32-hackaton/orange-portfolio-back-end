@@ -56,3 +56,27 @@ export async function getUserProjectById(user_id, project_id) {
         where: { user_id, project_id },
     });
 }
+
+export async function getUserProjectsByTag(user_id, tag) {
+    return await prisma.projects.findMany({
+        select: {
+            project_id: true,
+            link: true,
+            Tags: {
+                select: { name: true },
+            },
+            image: true,
+            createdAt: true,
+        },
+        where: {
+            user_id,
+            Tags: {
+                some: {
+                    name: {
+                        contains: tag,
+                    },
+                },
+            },
+        },
+    });
+}
