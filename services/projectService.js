@@ -37,6 +37,7 @@ export async function getAllUserProjects(user_id) {
             createdAt: true,
         },
         where: { user_id },
+        orderBy: { project_id: "desc" },
     });
 }
 
@@ -78,5 +79,6 @@ export async function getUserProjectsByTag(user_id, tag) {
                 },
             },
         },
+        orderBy: { project_id: "desc" },
     });
 }
