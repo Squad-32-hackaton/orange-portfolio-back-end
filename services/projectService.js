@@ -25,10 +25,22 @@ export async function create(data) {
     }
 }
 
-export async function getAllUserProjects(user_id) {
+export async function getProjects(user_id, onlyUserProjects = true) {
+    // Verify if should show only user's projects
+    const whereQuery = onlyUserProjects
+        ? { user_id }
+        : { user_id: { not: user_id } };
+
     return await prisma.projects.findMany({
         select: {
             project_id: true,
+            user: {
+                select: {
+                    first_name: true,
+                    last_name: true,
+                    avatar: true,
+                },
+            },
             link: true,
             Tags: {
                 select: { name: true },
@@ -36,7 +48,7 @@ export async function getAllUserProjects(user_id) {
             image: true,
             createdAt: true,
         },
-        where: { user_id },
+        where: whereQuery,
         orderBy: { project_id: "desc" },
     });
 }

@@ -36,10 +36,33 @@ export async function create(req, res) {
     res.status(201).json({ project: projectResponse });
 }
 
-export async function getAllUserProjects(req, res) {
-    const { id: user_id } = req.params;
+export async function getProjects(req, res) {
+    const { id } = req.params;
 
-    const projects = await projectService.getAllUserProjects(parseInt(user_id));
+    const paramsSchema = z.object({
+        user_id: z
+            .number({
+                invalid_type_error: "Param 'user_id' must be a number",
+            })
+            .nullable(),
+    });
+
+    let user_id = id ? parseInt(id) : null;
+    const params = paramsSchema.safeParse({ user_id });
+
+    if (!params.success) {
+        const errors = params.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
+
+    // If the ID was sent, then it should only show user's own projects
+    const showOnlyUserProjects = !!params.data.user_id;
+    user_id = params.data.user_id || req.user.user_id;
+
+    const projects = await projectService.getProjects(
+        user_id,
+        showOnlyUserProjects,
+    );
     return res.json({ projects });
 }
 
