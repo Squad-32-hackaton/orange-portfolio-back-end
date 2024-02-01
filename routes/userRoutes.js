@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { getUsers, addUser } from "../controllers/userController.js";
-import { getProfile, loginUser } from "../controllers/loginController.js";
+import {
+    getProfile,
+    loginUserWithEmail,
+} from "../controllers/authController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
@@ -16,7 +19,7 @@ router.get("/", (_, res) => {
 });
 
 // Rota de login
-router.post("/login", loginUser);
+router.post("/login", loginUserWithEmail);
 
 //profile
 router.get("/login/profile", authMiddleware, getProfile);
