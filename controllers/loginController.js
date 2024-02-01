@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { UnauthorizedError } from "../helpers/api-errors.js";
 import passport from "passport";
 import { uuid } from "uuidv4";
+import loginSchema from "../zodSchemas/loginSchema.js";
 
 const prisma = new PrismaClient();
 
@@ -15,24 +16,31 @@ function geraToken(id) {
 }
 
 export async function loginUserWithEmail(req, res) {
-    // Req de login com email e senha
+    // Requisição para login com email e senha
     const reqEmail = req.body.email;
     const reqPassword = req.body.password;
 
-    // consulta no banco se o email existe
-    const user = await prisma.users.findUnique({
+    const safeLogin = loginSchema.safeParse({
+        email: reqEmail,
+        password: reqPassword,
+    });
+    if (!safeLogin) {
+        throw new UnauthorizedError("Invalid email or password!");
+    }
+    // consulta no banco se o email existeSim
+    const user = await prisma.users.findFirst({
         where: { email: reqEmail },
     });
 
     if (!user) {
-        throw new UnauthorizedError("invalid email or password!");
+        throw new UnauthorizedError("Invalid email or password!");
     }
 
-    // Verifica se senha do usuário
+    // Verifica se senha do usuário é igual ao do banco
     const verifyPass = await bcrypt.compare(reqPassword, user.password);
 
     if (!verifyPass) {
-        throw new UnauthorizedError("invalid email or password!");
+        throw new UnauthorizedError("Invalid email or password!");
     }
 
     // retorna o email e token

@@ -13,22 +13,22 @@ import db from "./db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
-import authRoutes from "./routes/authRoutes.js";
+import loginRoutes from "./routes/loginRoutes.js";
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/", userRoutes);
-app.use("/", authRoutes);
+app.use("/", loginRoutes);
 app.use("/", projectRoutes);
 app.use("/", uploadRoutes);
 app.use("/images", express.static("uploads"));
 
 db.connect((err) => {
     if (err) {
-        console.error("Erro ao conectar ao Banco de dados!:", err);
+        console.error("Error connecting to the Database!:", err);
     } else {
-        console.log("Conectado ao Banco de dados!");
+        console.log("Connecting to the Database!");
     }
 });
 
