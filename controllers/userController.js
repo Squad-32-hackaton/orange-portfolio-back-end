@@ -30,15 +30,14 @@ export async function addUser(req, res) {
 
     try {
         if (body.success) {
-            const user = await prisma.users.create({ data: body.data });
+            await prisma.users.create({ data: body.data });
 
-            res.status(201).json("Cadastro Feito com sucesso");
+            res.status(201).json("User successfully registered");
         }
     } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === "P2002") {
                 return res.status(409).json({
-                    status: "fail",
                     message:
                         "Email already exist, please use another email address",
                 });
