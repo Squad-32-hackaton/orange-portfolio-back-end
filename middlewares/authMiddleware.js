@@ -12,10 +12,10 @@ export async function authMiddleware(req, res, next) {
     // retira a string "baren" token da string
     const token = authorization.split(" ")[1];
 
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const { id: user_id } = jwt.verify(token, process.env.JWT_SECRET);
 
     // consulta no banco se o email existe
-    const user = await prisma.users.findFirst({ where: { id } });
+    const user = await prisma.users.findFirst({ where: { user_id } });
 
     if (!user) {
         throw new UnauthorizedError("Email ou senha Inválidos!");
