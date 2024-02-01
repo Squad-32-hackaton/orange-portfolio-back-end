@@ -66,13 +66,25 @@ export async function getProjects(req, res) {
     return res.json({ projects });
 }
 
-export async function getUserProjectById(req, res) {
-    const { user_id, id: project_id } = req.params;
+export async function getProjectById(req, res) {
+    const { id: project_id } = req.params;
 
-    const project = await projectService.getUserProjectById(
-        parseInt(user_id),
-        parseInt(project_id),
-    );
+    const paramsSchema = z.object({
+        project_id: z.number({
+            required_error: "Param 'project_id' is required",
+            invalid_type_error: "Param 'project_id' must be a number",
+        }),
+    });
+
+    const reqParams = { project_id: parseInt(project_id) };
+    const params = paramsSchema.safeParse(reqParams);
+
+    if (!params.success) {
+        const errors = params.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
+
+    const project = await projectService.getProjectById(params.data.project_id);
 
     if (!project) throw new NotFoundError("Project not found");
 
