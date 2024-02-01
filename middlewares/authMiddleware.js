@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export async function authMiddleware(req, res, next) {
     const { authorization } = req.headers;
     if (!authorization) {
-        throw new UnauthorizedError("Email ou senha Inválidos!");
+        throw new UnauthorizedError("Invalid email or password!");
     }
     // retira a string "baren" token da string
     const token = authorization.split(" ")[1];
@@ -18,7 +18,7 @@ export async function authMiddleware(req, res, next) {
     const user = await prisma.users.findFirst({ where: { id } });
 
     if (!user) {
-        throw new UnauthorizedError("Email ou senha Inválidos!");
+        throw new UnauthorizedError("Invalid email or password!");
     }
 
     // verifica se o usuário está logado
