@@ -95,7 +95,7 @@ export async function getProjectsByTag(req, res) {
     const { id } = req.params;
     const { tag } = req.query;
 
-    const paramsScema = z.object({
+    const paramsSchema = z.object({
         user_id: z
             .number({
                 invalid_type_error: "Param 'user_id' must be a number",
@@ -109,7 +109,7 @@ export async function getProjectsByTag(req, res) {
     let user_id = id ? parseInt(id) : null;
     const data = { user_id, tag };
 
-    const params = paramsScema.safeParse(data);
+    const params = paramsSchema.safeParse(data);
     if (!params.success) {
         const errors = params.error.issues.map((issue) => issue.message);
         return res.status(400).json({ errors });
@@ -126,4 +126,37 @@ export async function getProjectsByTag(req, res) {
     );
 
     return res.json({ projects });
+}
+
+export async function deleteProject(req, res) {
+    const { user_id, id: project_id } = req.params;
+
+    const paramsSchema = z.object({
+        user_id: z.number({
+            required_error: "Param 'user_id' is required",
+            invalid_type_error: "Param 'user_id' must be a number",
+        }),
+        project_id: z.number({
+            required_error: "Param 'project_id' is required",
+            invalid_type_error: "Param 'project_id' must be a number",
+        }),
+    });
+
+    const data = {
+        user_id: parseInt(user_id),
+        project_id: parseInt(project_id),
+    };
+
+    const params = paramsSchema.safeParse(data);
+    if (!params.success) {
+        const errors = params.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
+
+    await projectService.deleteProject(
+        params.data.user_id,
+        params.data.project_id,
+    );
+
+    return res.json({ message: "project deleted successfully" });
 }
