@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NotFoundError } from "../helpers/api-errors.js";
+import formatDate from "../helpers/formatDate.js";
 
 const prisma = new PrismaClient();
 
@@ -7,19 +8,11 @@ export async function create(data) {
     try {
         return await prisma.projects.create({ data });
     } catch (error) {
-        if (
-            error.message.includes(
-                "Foreign key constraint failed on the field: `user_id`",
-            )
-        ) {
+        if (error.message.includes("field: `user_id`")) {
             throw new NotFoundError(`User with id ${data.user_id} not found`);
         }
 
-        if (
-            error.message.includes(
-                "Foreign key constraint failed on the field: `image_id`",
-            )
-        ) {
+        if (error.message.includes("field: `image_id`")) {
             throw new NotFoundError(`Image with id ${data.image_id} not found`);
         }
     }
@@ -31,7 +24,7 @@ export async function getProjects(user_id, onlyUserProjects = true) {
         ? { user_id }
         : { user_id: { not: user_id } };
 
-    return await prisma.projects.findMany({
+    const projects = await prisma.projects.findMany({
         select: {
             project_id: true,
             user: {
@@ -41,7 +34,6 @@ export async function getProjects(user_id, onlyUserProjects = true) {
                     avatar: true,
                 },
             },
-            link: true,
             Tags: {
                 select: { name: true },
             },
@@ -51,10 +43,23 @@ export async function getProjects(user_id, onlyUserProjects = true) {
         where: whereQuery,
         orderBy: { project_id: "desc" },
     });
+
+    return projects.map((project) => {
+        return {
+            project_id: project.project_id,
+            user: {
+                name: `${project.user.first_name} ${project.user.last_name}`,
+                avatar: project.user.avatar?.filename || null,
+            },
+            tags: project.Tags.map((tag) => tag.name),
+            image: project.image.filename,
+            creationDate: formatDate(project.createdAt),
+        };
+    });
 }
 
 export async function getProjectById(project_id) {
-    return await prisma.projects.findFirst({
+    const project = await prisma.projects.findFirst({
         select: {
             project_id: true,
             user: {
@@ -75,13 +80,38 @@ export async function getProjectById(project_id) {
         },
         where: { project_id },
     });
+
+    return {
+        project_id: project.project_id,
+        user: {
+            name: `${project.user.first_name} ${project.user.last_name}`,
+            avatar: project.user.avatar?.filename || null,
+        },
+        title: project.title,
+        description: project.description,
+        link: project.link,
+        tags: project.Tags.map((tag) => tag.name),
+        image: project.image.filename,
+        creationDate: formatDate(project.createdAt),
+    };
 }
 
-export async function getUserProjectsByTag(user_id, tag) {
-    return await prisma.projects.findMany({
+export async function getProjectsByTag(user_id, tag, onlyUserProjects = true) {
+    // Verify if should show only user's projects
+    const filter = onlyUserProjects
+        ? { user_id }
+        : { user_id: { not: user_id } };
+
+    const projects = await prisma.projects.findMany({
         select: {
             project_id: true,
-            link: true,
+            user: {
+                select: {
+                    first_name: true,
+                    last_name: true,
+                    avatar: true,
+                },
+            },
             Tags: {
                 select: { name: true },
             },
@@ -89,7 +119,7 @@ export async function getUserProjectsByTag(user_id, tag) {
             createdAt: true,
         },
         where: {
-            user_id,
+            ...filter,
             Tags: {
                 some: {
                     name: {
@@ -99,5 +129,18 @@ export async function getUserProjectsByTag(user_id, tag) {
             },
         },
         orderBy: { project_id: "desc" },
+    });
+
+    return projects.map((project) => {
+        return {
+            project_id: project.project_id,
+            user: {
+                name: `${project.user.first_name} ${project.user.last_name}`,
+                avatar: project.user.avatar?.filename || null,
+            },
+            tags: project.Tags.map((tag) => tag.name),
+            image: project.image.filename,
+            creationDate: formatDate(project.createdAt),
+        };
     });
 }

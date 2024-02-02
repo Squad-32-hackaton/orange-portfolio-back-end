@@ -91,28 +91,38 @@ export async function getProjectById(req, res) {
     return res.json({ project });
 }
 
-export async function getUserProjectsByTag(req, res) {
-    const { id: user_id } = req.params;
+export async function getProjectsByTag(req, res) {
+    const { id } = req.params;
     const { tag } = req.query;
 
     const paramsScema = z.object({
-        user_id: z.number({
-            invalid_type_error: "Param 'user_id' must be a number",
-        }),
+        user_id: z
+            .number({
+                invalid_type_error: "Param 'user_id' must be a number",
+            })
+            .nullable(),
         tag: z.string({
             required_error: "Query string 'tag' is required",
         }),
     });
 
-    const params = paramsScema.safeParse({ user_id: parseInt(user_id), tag });
+    let user_id = id ? parseInt(id) : null;
+    const data = { user_id, tag };
+
+    const params = paramsScema.safeParse(data);
     if (!params.success) {
         const errors = params.error.issues.map((issue) => issue.message);
         return res.status(400).json({ errors });
     }
 
-    const projects = await projectService.getUserProjectsByTag(
-        params.data.user_id,
+    // If the ID was sent, then it should only show user's own projects
+    const showOnlyUserProjects = !!params.data.user_id;
+    user_id = params.data.user_id || req.user.user_id;
+
+    const projects = await projectService.getProjectsByTag(
+        user_id,
         params.data.tag,
+        showOnlyUserProjects,
     );
 
     return res.json({ projects });
