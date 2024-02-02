@@ -28,12 +28,7 @@ export async function create(req, res) {
 
     await tagService.createMany(tagsData);
 
-    const projectResponse = {
-        ...project,
-        tags: body.data.tags,
-    };
-
-    res.status(201).json({ project: projectResponse });
+    res.status(201).json({ message: "project created successfully" });
 }
 
 export async function getProjects(req, res) {
@@ -159,4 +154,59 @@ export async function deleteProject(req, res) {
     );
 
     return res.json({ message: "project deleted successfully" });
+}
+
+export async function updateProject(req, res) {
+    const { user_id, id: project_id } = req.params;
+
+    const paramsSchema = z.object({
+        user_id: z.number({
+            required_error: "Param 'user_id' is required",
+            invalid_type_error: "Param 'user_id' must be a number",
+        }),
+        project_id: z.number({
+            required_error: "Param 'project_id' is required",
+            invalid_type_error: "Param 'project_id' must be a number",
+        }),
+    });
+
+    const data = {
+        user_id: parseInt(user_id),
+        project_id: parseInt(project_id),
+    };
+
+    const params = paramsSchema.safeParse(data);
+    const body = projectSchema.safeParse(req.body);
+    if (!params.success) {
+        const errors = params.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
+
+    if (!body.success) {
+        const errors = body.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
+
+    const projectData = {
+        user_id: params.data.user_id,
+        ...body.data,
+        tags: undefined,
+    };
+
+    const project = await projectService.updateProject(
+        params.data.user_id,
+        params.data.project_id,
+        projectData,
+    );
+
+    const tagsData = body.data.tags.map((tag) => ({
+        name: tag,
+        project_id: project.project_id,
+    }));
+
+    // reset project tags
+    await tagService.deleteAll(project.project_id);
+    await tagService.createMany(tagsData);
+
+    res.status(200).json({ message: "project updated successfully" });
 }

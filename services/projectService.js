@@ -156,3 +156,23 @@ export async function deleteProject(user_id, project_id) {
     if (!project) throw new NotFoundError("Project not found");
     return await prisma.projects.delete({ where: { project_id } });
 }
+
+export async function updateProject(user_id, project_id, data) {
+    try {
+        return await prisma.projects.update({
+            data,
+            where: {
+                project_id,
+                user_id,
+            },
+        });
+    } catch (error) {
+        if (error.message.includes("field: `user_id`")) {
+            throw new NotFoundError(`User with id ${data.user_id} not found`);
+        }
+
+        if (error.message.includes("field: `image_id`")) {
+            throw new NotFoundError(`Image with id ${data.image_id} not found`);
+        }
+    }
+}
