@@ -167,6 +167,10 @@ export async function updateProject(user_id, project_id, data) {
             },
         });
     } catch (error) {
+        if (error.message.includes("Record to update not found")) {
+            throw new NotFoundError(`Project with id ${project_id} not found`);
+        }
+
         if (error.message.includes("field: `user_id`")) {
             throw new NotFoundError(`User with id ${data.user_id} not found`);
         }
