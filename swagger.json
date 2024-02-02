@@ -79,6 +79,31 @@
                 }
             }
         },
+        "/login/profile": {
+            "post": {
+                "summary": "Dados do usuário logado",
+                "description": "Retorna algumas informações do usuário logado",
+                "responses": {
+                    "200": {
+                        "description": "dados retornados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "user_id": 1,
+                                        "first_name": "Tiago",
+                                        "last_name": "Lopes",
+                                        "email": "tiagolopes@gmail.com",
+                                        "avatar_id": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "post": {
                 "summary": "Cadastro de usuários",
@@ -323,21 +348,27 @@
                                     "example": {
                                         "projects": [
                                             {
-                                                "project_id": 1,
-                                                "link": "https://github.com/Squad-32-hackaton",
-                                                "Tags": [
-                                                    {
-                                                        "name": "front-end"
-                                                    },
-                                                    {
-                                                        "name": "mobile"
-                                                    }
-                                                ],
-                                                "image": {
-                                                    "image_id": 1,
-                                                    "filename": "1706481307449_frontend.png"
+                                                "project_id": 5,
+                                                "user": {
+                                                    "name": "Tiago Lopes",
+                                                    "avatar": "1706654310565_api.png"
                                                 },
-                                                "createdAt": "2024-01-29T23:42:46.165Z"
+                                                "tags": [
+                                                    "Front-end",
+                                                    "Back-end"
+                                                ],
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
+                                            },
+                                            {
+                                                "project_id": 2,
+                                                "user": {
+                                                    "name": "Tiago Lopes",
+                                                    "avatar": "1706654310565_api.png"
+                                                },
+                                                "tags": ["Teste"],
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
                                             }
                                         ]
                                     }
@@ -388,37 +419,26 @@
                                         "projects": [
                                             {
                                                 "project_id": 5,
-                                                "link": "https://orangeportfoliosquad32.software",
-                                                "Tags": [
-                                                    {
-                                                        "name": "Front-end"
-                                                    },
-                                                    {
-                                                        "name": "Back-end"
-                                                    }
-                                                ],
-                                                "image": {
-                                                    "image_id": 1,
-                                                    "filename": "1706654310565_api.png"
+                                                "user": {
+                                                    "name": "Tiago Lopes",
+                                                    "avatar": "1706654310565_api.png"
                                                 },
-                                                "createdAt": "2024-01-31T00:44:04.509Z"
+                                                "tags": [
+                                                    "Front-end",
+                                                    "Back-end"
+                                                ],
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
                                             },
                                             {
                                                 "project_id": 1,
-                                                "link": "https://github.com/Squad-32-hackaton",
-                                                "Tags": [
-                                                    {
-                                                        "name": "front-end"
-                                                    },
-                                                    {
-                                                        "name": "mobile"
-                                                    }
-                                                ],
-                                                "image": {
-                                                    "image_id": 1,
-                                                    "filename": "1706654310565_api.png"
+                                                "user": {
+                                                    "name": "Tiago Lopes",
+                                                    "avatar": "1706654310565_api.png"
                                                 },
-                                                "createdAt": "2024-01-30T22:57:33.861Z"
+                                                "tags": ["front-end", "mobile"],
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
                                             }
                                         ]
                                     }
@@ -466,49 +486,30 @@
                                             {
                                                 "project_id": 7,
                                                 "user": {
-                                                    "first_name": "Fernando",
-                                                    "last_name": "José",
+                                                    "name": "Fernando José",
                                                     "avatar": null
                                                 },
                                                 "link": "https://orangeportfoliosquad32.software",
-                                                "Tags": [
-                                                    {
-                                                        "name": "Front-end"
-                                                    },
-                                                    {
-                                                        "name": "Back-end"
-                                                    }
+                                                "tags": [
+                                                    "Front-end",
+                                                    "Back-end"
                                                 ],
-                                                "image": {
-                                                    "image_id": 1,
-                                                    "filename": "1706654310565_api.png"
-                                                },
-                                                "createdAt": "2024-02-01T00:35:55.745Z"
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
                                             },
                                             {
                                                 "project_id": 6,
                                                 "user": {
-                                                    "first_name": "Tiago",
-                                                    "last_name": "Silva",
-                                                    "avatar": {
-                                                        "image_id": 1,
-                                                        "filename": "1706654310565_api.png"
-                                                    }
+                                                    "name": "Tiago Silva",
+                                                    "avatar": "1706654310565_api.png"
                                                 },
                                                 "link": "https://orangeportfoliosquad32.software",
-                                                "Tags": [
-                                                    {
-                                                        "name": "Front-end"
-                                                    },
-                                                    {
-                                                        "name": "Back-end"
-                                                    }
+                                                "tags": [
+                                                    "Front-end",
+                                                    "Back-end"
                                                 ],
-                                                "image": {
-                                                    "image_id": 1,
-                                                    "filename": "1706654310565_api.png"
-                                                },
-                                                "createdAt": "2024-02-01T00:21:49.781Z"
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
                                             }
                                         ]
                                     }
@@ -550,29 +551,15 @@
                                         "project": {
                                             "project_id": 1,
                                             "user": {
-                                                "first_name": "Tiago",
-                                                "last_name": "Lopes",
-                                                "avatar": {
-                                                    "image_id": 1,
-                                                    "filename": "1706654310565_api.png"
-                                                }
+                                                "name": "Tiago Lopes",
+                                                "avatar": "1706654310565_api.png"
                                             },
                                             "title": "Teste de projeto",
                                             "description": "Teste de novo projeto",
                                             "link": "https://github.com/Squad-32-hackaton",
-                                            "Tags": [
-                                                {
-                                                    "name": "front-end"
-                                                },
-                                                {
-                                                    "name": "mobile"
-                                                }
-                                            ],
-                                            "image": {
-                                                "image_id": 1,
-                                                "filename": "1706654310565_api.png"
-                                            },
-                                            "createdAt": "2024-01-30T22:57:33.861Z"
+                                            "tags": ["front-end", "mobile"],
+                                            "image": "1706654310565_api.png",
+                                            "creationDate": "01/24"
                                         }
                                     }
                                 }
@@ -587,6 +574,87 @@
                                     "type": "object",
                                     "example": {
                                         "message": "Project not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/searchProjects": {
+            "get": {
+                "summary": "Filtra projetos de outros usuários por tag",
+                "description": "Exibe todos os projetos de outros usuário que contém uma tag específica",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "description": "Tag que os projetos devem conter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "projetos contendo a tag retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "projects": [
+                                            {
+                                                "project_id": 7,
+                                                "user": {
+                                                    "name": "Fernando José",
+                                                    "avatar": null
+                                                },
+                                                "link": "https://orangeportfoliosquad32.software",
+                                                "tags": [
+                                                    "Front-end",
+                                                    "Back-end"
+                                                ],
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
+                                            },
+                                            {
+                                                "project_id": 6,
+                                                "user": {
+                                                    "name": "Tiago Silva",
+                                                    "avatar": "1706654310565_api.png"
+                                                },
+                                                "link": "https://orangeportfoliosquad32.software",
+                                                "tags": [
+                                                    "Front-end",
+                                                    "Back-end"
+                                                ],
+                                                "image": "1706654310565_api.png",
+                                                "creationDate": "01/24"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "errors": [
+                                            "Query string 'tag' is required"
+                                        ]
                                     }
                                 }
                             }
