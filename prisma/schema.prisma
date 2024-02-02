@@ -20,7 +20,7 @@ model Users {
     createdAt  DateTime   @default(now())
     updatedAt  DateTime   @updatedAt
     Projects   Projects[]
-    avatar     Images?     @relation(fields: [avatar_id], references: [image_id])
+    avatar     Images?    @relation(fields: [avatar_id], references: [image_id])
 
     @@index([email])
 }
@@ -47,7 +47,7 @@ model Tags {
     updatedAt  DateTime @updatedAt
     project_id Int
 
-    project Projects @relation(fields: [project_id], references: [project_id])
+    project Projects @relation(fields: [project_id], references: [project_id], onDelete: Cascade)
 }
 
 model Images {

@@ -144,3 +144,15 @@ export async function getProjectsByTag(user_id, tag, onlyUserProjects = true) {
         };
     });
 }
+
+export async function deleteProject(user_id, project_id) {
+    const project = await prisma.projects.findFirst({
+        select: {
+            project_id: true,
+        },
+        where: { user_id, project_id },
+    });
+
+    if (!project) throw new NotFoundError("Project not found");
+    return await prisma.projects.delete({ where: { project_id } });
+}
