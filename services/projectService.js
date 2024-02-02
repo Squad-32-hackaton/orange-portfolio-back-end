@@ -53,10 +53,17 @@ export async function getProjects(user_id, onlyUserProjects = true) {
     });
 }
 
-export async function getUserProjectById(user_id, project_id) {
+export async function getProjectById(project_id) {
     return await prisma.projects.findFirst({
         select: {
             project_id: true,
+            user: {
+                select: {
+                    first_name: true,
+                    last_name: true,
+                    avatar: true,
+                },
+            },
             title: true,
             description: true,
             link: true,
@@ -66,7 +73,7 @@ export async function getUserProjectById(user_id, project_id) {
             image: true,
             createdAt: true,
         },
-        where: { user_id, project_id },
+        where: { project_id },
     });
 }
 
