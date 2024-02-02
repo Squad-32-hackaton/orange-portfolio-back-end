@@ -284,15 +284,7 @@
                                     "type": "object",
                                     "example": {
                                         "project": {
-                                            "project_id": 1,
-                                            "user_id": 1,
-                                            "title": "Teste de projeto",
-                                            "description": "Teste de novo projeto",
-                                            "image_id": 1,
-                                            "link": "https://github.com/Squad-32-hackaton",
-                                            "createdAt": "2024-01-29T23:42:46.165Z",
-                                            "updatedAt": "2024-01-29T23:42:46.165Z",
-                                            "tags": ["front-end", "mobile"]
+                                            "message": "project created successfully"
                                         }
                                     }
                                 }
@@ -380,6 +372,124 @@
             }
         },
         "/users/{user_id}/projects/{id}": {
+            "put": {
+                "summary": "Edição de projetos",
+                "description": "Edita os dados de um projeto de um usuário",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do projeto",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "tags": {
+                                        "type": "object",
+                                        "required": true
+                                    },
+                                    "image_id": {
+                                        "type": "number",
+                                        "required": true
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "usuário": {
+                                    "value": {
+                                        "title": "Teste de projeto",
+                                        "description": "Teste de novo projeto",
+                                        "link": "https://github.com/Squad-32-hackaton",
+                                        "tags": ["front-end", "mobile"],
+                                        "image_id": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "edição efetuada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "project": {
+                                            "message": "project updated successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "errors": [
+                                            "Field 'description' is required",
+                                            "Field 'link' must be a string",
+                                            "Field 'tags' must be a string array",
+                                            "Field 'image_id' must be a number"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "projeto não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Project not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "delete": {
                 "summary": "Exclusão de projetos",
                 "description": "Deleta o projeto de um usuário.",
