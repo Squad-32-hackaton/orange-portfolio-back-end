@@ -4,19 +4,6 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function getUsers(req, res) {
-    const users = await prisma.users.findMany({
-        select: {
-            user_id: true,
-            first_name: true,
-            last_name: true,
-            email: true,
-        },
-    });
-
-    res.json(users);
-}
-
 export async function addUser(req, res) {
     const user = {
         first_name: req.body.first_name,
