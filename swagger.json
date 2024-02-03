@@ -214,6 +214,56 @@
                 }
             }
         },
+        "/upload": {
+            "post": {
+                "summary": "Upload de imagens",
+                "description": "Upload de imagens no sistema",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    }
+                                }
+                            },
+                            "encoding": {
+                                "file": {
+                                    "style": "form"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "upload de imagem realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "image": {
+                                            "image_id": 5,
+                                            "filename": "1706920217509_api.png"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/{id}/projects": {
             "post": {
                 "summary": "Cadastro de projetos",
