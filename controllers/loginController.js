@@ -8,28 +8,31 @@ import loginSchema from "../zodSchemas/loginSchema.js";
 
 const prisma = new PrismaClient();
 
-// geração do token pra usuário com tempo de 1h
+// geração do token pra usuário com tempo de 24h
 function geraToken(id) {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "24h",
     });
 }
 
 export async function loginUserWithEmail(req, res) {
     // Requisição para login com email e senha
-    const reqEmail = req.body.email;
-    const reqPassword = req.body.password;
+    const login = {
+        email: req.body.email,
+        password: req.body.password,
+    };
 
-    const safeLogin = loginSchema.safeParse({
-        email: reqEmail,
-        password: reqPassword,
-    });
-    if (!safeLogin) {
-        throw new UnauthorizedError("Invalid email or password!");
+    //validação dos formulários
+    const safeLogin = loginSchema.safeParse(login);
+
+    if (!safeLogin.success) {
+        const errors = safeLogin.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
     }
-    // consulta no banco se o email existeSim
+
+    //consulta no banco se o email existeSim
     const user = await prisma.users.findFirst({
-        where: { email: reqEmail },
+        where: { email: login.email },
     });
 
     if (!user) {
@@ -37,27 +40,17 @@ export async function loginUserWithEmail(req, res) {
     }
 
     // Verifica se senha do usuário é igual ao do banco
-    const verifyPass = await bcrypt.compare(reqPassword, user.password);
+    const verifyPassword = await bcrypt.compare(login.password, user.password);
 
-    if (!verifyPass) {
+    if (!verifyPassword) {
         throw new UnauthorizedError("Invalid email or password!");
     }
 
-    // retorna o email e token
-    const {
-        password,
-        email,
-        createdAt,
-        updatedAt,
-        avatar,
-        first_name,
-        last_name,
-        ...userLogin
-    } = user;
+    // retorna o token
 
     const token = geraToken(user.user_id);
 
-    return res.json(userLogin, token);
+    return res.json(token);
 }
 
 export async function loginUserWithGoogle(req, res) {
@@ -97,16 +90,13 @@ export async function loginUserWithGoogle(req, res) {
             }
 
             return res.json({
-                user: {
-                    email: googleUser.email,
-                },
                 token,
             });
         },
     )(req, res, null);
 }
 
+// para o front pegar os dados do usuário
 export async function getProfile(req, res) {
-    //tratar erro
-    return res.json(req.user.id);
+    return res.json(req.user);
 }

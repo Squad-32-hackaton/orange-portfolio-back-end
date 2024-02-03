@@ -9,7 +9,7 @@ import bodyParser from "body-parser";
 import userRoutes from "./routes/userRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
-import db from "./db.js";
+import db from "./database/db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
@@ -18,6 +18,11 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
+// Home
+app.get("/", (_, res) => {
+    res.json({ message: "API running successfully" });
+});
+
 app.use("/", userRoutes);
 app.use("/", loginRoutes);
 app.use("/", projectRoutes);

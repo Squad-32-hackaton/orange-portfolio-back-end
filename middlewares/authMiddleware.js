@@ -21,8 +21,7 @@ export async function authMiddleware(req, res, next) {
         throw new UnauthorizedError("Invalid email or password!");
     }
 
-    // verifica se o usuário está logado
-    const { password_, createdAt, updatedAt, avatar, ...loggedUser } = user;
+    const { password: _, createdAt, updatedAt, avatar, ...loggedUser } = user;
     req.user = loggedUser;
 
     next();
