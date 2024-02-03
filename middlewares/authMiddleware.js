@@ -9,13 +9,13 @@ export async function authMiddleware(req, _, next) {
     if (!authorization) {
         throw new UnauthorizedError("Invalid email or password!");
     }
-    // retira a string "baren" token da string
+    // remove string "bearer" from the token
     const token = authorization.split(" ")[1];
 
     try {
         const { id: user_id } = jwt.verify(token, process.env.JWT_SECRET);
 
-        // consulta no banco se o email existe
+        // checks if user already exists
         const user = await prisma.users.findFirst({ where: { user_id } });
 
         if (!user) {

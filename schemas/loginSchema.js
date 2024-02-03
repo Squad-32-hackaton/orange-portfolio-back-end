@@ -1,5 +1,5 @@
 import { z } from "zod";
-//validação dos dados com ZOD
+// data validation with zod
 const loginSchema = z.object({
     email: z
         .string({
