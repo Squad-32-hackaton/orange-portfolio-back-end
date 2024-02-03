@@ -8,7 +8,11 @@ const userSchema = z.object({
         })
         .min(3, "Field 'name' contain at least 3 characters ")
         .max(50, "Field 'name' contain to maximum 50 characters ")
-        .trim(),
+        .trim()
+        .regex(
+            /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/i,
+            "Field 'name' is invalid",
+        ),
 
     last_name: z
         .string({
@@ -16,8 +20,12 @@ const userSchema = z.object({
             invalid_type_error: "Field 'last_name' must be a string",
         })
         .min(3, "Field 'last_name'contain at least 3 characters")
-        .max(50, "Field 'name' contain to maximum 50 characters ")
-        .trim(),
+        .max(50, "Field 'last_name' contain to maximum 50 characters ")
+        .trim()
+        .regex(
+            /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/i,
+            "Field 'last_name' is invalid",
+        ),
 
     email: z
         .string({
@@ -37,11 +45,11 @@ const userSchema = z.object({
             required_error: "Field 'password' is required",
         })
         .regex(
-            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
-            "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital letter at least one special character at least 8 of the characters",
+            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$/,
+            "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital",
         )
-        .max(50, "Field 'name' contain to maximum 50 characters ")
-        .trim(),
+        .min(8, "Field 'password' contain to minimun 8 characters ")
+        .max(50, "Field 'password' contain to maximum 50 characters "),
 
     avatar_id: z
         .number({
