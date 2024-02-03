@@ -2,13 +2,14 @@ import * as projectSchema from "../schemas/projectSchema.js";
 import { NotFoundError } from "../helpers/api-errors.js";
 import * as projectService from "../services/projectService.js";
 import * as tagService from "../services/tagService.js";
+import showZodErrors from "../helpers/showZodErrors.js";
 
 export async function create(req, res) {
     const { id: user_id } = req.params;
 
     const body = projectSchema.createAndUpdate.safeParse(req.body);
     if (!body.success) {
-        const errors = body.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(body.error);
         return res.status(400).json({ errors });
     }
 
@@ -37,7 +38,7 @@ export async function getProjects(req, res) {
     const params = projectSchema.getAll.safeParse({ user_id });
 
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -59,7 +60,7 @@ export async function getProjectById(req, res) {
     const params = projectSchema.getById.safeParse(reqParams);
 
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -79,7 +80,7 @@ export async function getProjectsByTag(req, res) {
 
     const params = projectSchema.getByTag.safeParse(data);
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -106,7 +107,7 @@ export async function deleteProject(req, res) {
 
     const params = projectSchema.getByUserIdAndId.safeParse(data);
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -129,12 +130,12 @@ export async function updateProject(req, res) {
     const params = projectSchema.getByUserIdAndId.safeParse(data);
     const body = projectSchema.createAndUpdate.safeParse(req.body);
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
     if (!body.success) {
-        const errors = body.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(body.error);
         return res.status(400).json({ errors });
     }
 

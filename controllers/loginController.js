@@ -5,6 +5,7 @@ import { UnauthorizedError } from "../helpers/api-errors.js";
 import passport from "passport";
 import { uuid } from "uuidv4";
 import loginSchema from "../schemas/loginSchema.js";
+import showZodErrors from "../helpers/showZodErrors.js";
 
 const prisma = new PrismaClient();
 
@@ -26,7 +27,7 @@ export async function loginUserWithEmail(req, res) {
     const safeLogin = loginSchema.safeParse(login);
 
     if (!safeLogin.success) {
-        const errors = safeLogin.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(safeLogin.error);
         return res.status(400).json({ errors });
     }
 

@@ -1,6 +1,7 @@
 import userSchema from "../schemas/userSchema.js";
 import bcrypt from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
+import showZodErrors from "../helpers/showZodErrors.js";
 
 const prisma = new PrismaClient();
 
@@ -17,7 +18,7 @@ export async function addUser(req, res) {
     const safeUser = userSchema.safeParse(user);
 
     if (!safeUser.success) {
-        const errors = safeUser.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(safeUser.error);
         return res.status(400).json({ errors });
     }
 
