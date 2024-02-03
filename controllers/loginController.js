@@ -46,7 +46,7 @@ export async function loginUserWithEmail(req, res) {
     // retorna o email e token
     const {
         password,
-        user_id,
+        email,
         createdAt,
         updatedAt,
         avatar,
@@ -57,7 +57,7 @@ export async function loginUserWithEmail(req, res) {
 
     const token = geraToken(user.user_id);
 
-    return res.json({ user: userLogin, token });
+    return res.json(userLogin, token);
 }
 
 export async function loginUserWithGoogle(req, res) {
@@ -107,5 +107,6 @@ export async function loginUserWithGoogle(req, res) {
 }
 
 export async function getProfile(req, res) {
-    return res.json(req.user);
+    //tratar erro
+    return res.json(req.user.id);
 }

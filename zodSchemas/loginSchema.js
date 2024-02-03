@@ -9,10 +9,20 @@ const loginSchema = z.object({
         .email({
             invalid_type_error: "This is not a valid email",
         })
-        .max(50),
-    password: z.string({
-        required_error: "Field 'password' is required",
-        invalid_type_error: "Field 'password' must be a string",
-    }),
+        .min(5, "Field 'email'contain at least 3 characters")
+        .max(50, "Field 'email' contain to maximum 50 characters ")
+        .trim()
+        .toLowerCase(),
+
+    password: z
+        .string({
+            required_error: "Field 'password' is required",
+        })
+        .regex(
+            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
+            "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital letter at least one special character at least 8 of the characters",
+        )
+        .max(50, "Field 'name' contain to maximum 50 characters ")
+        .trim(),
 });
 export default loginSchema;

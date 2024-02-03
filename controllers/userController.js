@@ -1,6 +1,5 @@
 import userSchema from "../zodSchemas/userSchema.js";
 import bcrypt from "bcrypt";
-
 import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -11,7 +10,6 @@ export async function getUsers(req, res) {
             user_id: true,
             first_name: true,
             last_name: true,
-            avatar_id: true,
             email: true,
         },
     });
@@ -20,18 +18,28 @@ export async function getUsers(req, res) {
 }
 
 export async function addUser(req, res) {
-    const dataUser = req.body;
+    const user = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        password: req.body.password,
+        avatar_id: req.body.avatar_id,
+    };
+    //validação dos formulários
 
-    dataUser.password = await bcrypt.hash(dataUser.password, 10);
+    const safeUser = userSchema.safeParse(user);
 
-    dataUser.email = dataUser.email.toLowerCase();
-
-    const body = userSchema.safeParse(dataUser);
+    if (!safeUser.success) {
+        const errors = safeUser.error.issues.map((issue) => issue.message);
+        return res.status(400).json({ errors });
+    }
 
     try {
-        if (body.success) {
-            await prisma.users.create({ data: body.data });
-
+        if (safeUser.success) {
+            // Encripta a senha com bcrypt
+            user.password = await bcrypt.hash(user.password, 10);
+            // Salva no banco
+            await prisma.users.create({ data: user });
             res.status(201).json("User successfully registered");
         }
     } catch (err) {
