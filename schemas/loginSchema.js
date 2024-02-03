@@ -22,7 +22,7 @@ const loginSchema = z.object({
             /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$/,
             "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital",
         )
-        .min(8, "Field 'name' contain to maximum 50 characters ")
-        .max(50, "Field 'name' contain to maximum 50 characters "),
+        .min(8, "Field 'password' contain to maximum 50 characters ")
+        .max(50, "Field 'password' contain to maximum 50 characters "),
 });
 export default loginSchema;

@@ -25,7 +25,7 @@ router.get(
 
 router.get("/auth/google/callback", loginUserWithGoogle);
 
-router.get("/auth/google/failure", (req, res) => {
+router.get("/auth/google/failure", (_, res) => {
     res.send("Failed to authenticate..");
 });
 

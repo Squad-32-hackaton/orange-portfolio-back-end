@@ -4,7 +4,7 @@ import { UnauthorizedError } from "../helpers/api-errors.js";
 
 const prisma = new PrismaClient();
 
-export async function authMiddleware(req, res, next) {
+export async function authMiddleware(req, _, next) {
     const { authorization } = req.headers;
     if (!authorization) {
         throw new UnauthorizedError("Invalid email or password!");
@@ -21,7 +21,7 @@ export async function authMiddleware(req, res, next) {
         throw new UnauthorizedError("Invalid email or password!");
     }
 
-    const { password: _, createdAt, updatedAt, avatar, ...loggedUser } = user;
+    const { password, createdAt, updatedAt, ...loggedUser } = user;
     req.user = loggedUser;
 
     next();

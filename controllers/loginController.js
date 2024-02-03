@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { UnauthorizedError } from "../helpers/api-errors.js";
 import passport from "passport";
 import { uuid } from "uuidv4";
-import loginSchema from "../zodSchemas/loginSchema.js";
+import loginSchema from "../schemas/loginSchema.js";
 
 const prisma = new PrismaClient();
 
@@ -56,7 +56,7 @@ export async function loginUserWithEmail(req, res) {
 export async function loginUserWithGoogle(req, res) {
     return passport.authenticate(
         "google",
-        async function (err, googleUser, info, status) {
+        async function (err, googleUser, _, __) {
             if (err) {
                 throw new UnauthorizedError("Not allowed by user");
             }
