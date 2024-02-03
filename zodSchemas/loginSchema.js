@@ -19,10 +19,10 @@ const loginSchema = z.object({
             required_error: "Field 'password' is required",
         })
         .regex(
-            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
-            "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital letter at least one special character at least 8 of the characters",
+            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$/,
+            "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital",
         )
-        .max(50, "Field 'name' contain to maximum 50 characters ")
-        .trim(),
+        .min(8, "Field 'name' contain to maximum 50 characters ")
+        .max(50, "Field 'name' contain to maximum 50 characters "),
 });
 export default loginSchema;
