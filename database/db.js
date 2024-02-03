@@ -1,7 +1,7 @@
 import { createConnection } from "mysql";
 import { config } from "dotenv";
 
-config({ path: "./../env" }); // Carrega as variáveis de ambiente do arquivo .env
+config({ path: "./../env" }); // load the database environment variables
 const db = createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,

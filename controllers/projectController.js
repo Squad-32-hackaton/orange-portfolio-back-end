@@ -1,15 +1,15 @@
-import projectSchema from "../zodSchemas/projectSchema.js";
-import { z } from "zod";
+import * as projectSchema from "../schemas/projectSchema.js";
 import { NotFoundError } from "../helpers/api-errors.js";
 import * as projectService from "../services/projectService.js";
 import * as tagService from "../services/tagService.js";
+import showZodErrors from "../helpers/showZodErrors.js";
 
 export async function create(req, res) {
     const { id: user_id } = req.params;
 
-    const body = projectSchema.safeParse(req.body);
+    const body = projectSchema.createAndUpdate.safeParse(req.body);
     if (!body.success) {
-        const errors = body.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(body.error);
         return res.status(400).json({ errors });
     }
 
@@ -34,19 +34,11 @@ export async function create(req, res) {
 export async function getProjects(req, res) {
     const { id } = req.params;
 
-    const paramsSchema = z.object({
-        user_id: z
-            .number({
-                invalid_type_error: "Param 'user_id' must be a number",
-            })
-            .nullable(),
-    });
-
     let user_id = id ? parseInt(id) : null;
-    const params = paramsSchema.safeParse({ user_id });
+    const params = projectSchema.getAll.safeParse({ user_id });
 
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -64,18 +56,11 @@ export async function getProjects(req, res) {
 export async function getProjectById(req, res) {
     const { id: project_id } = req.params;
 
-    const paramsSchema = z.object({
-        project_id: z.number({
-            required_error: "Param 'project_id' is required",
-            invalid_type_error: "Param 'project_id' must be a number",
-        }),
-    });
-
     const reqParams = { project_id: parseInt(project_id) };
-    const params = paramsSchema.safeParse(reqParams);
+    const params = projectSchema.getById.safeParse(reqParams);
 
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -90,23 +75,12 @@ export async function getProjectsByTag(req, res) {
     const { id } = req.params;
     const { tag } = req.query;
 
-    const paramsSchema = z.object({
-        user_id: z
-            .number({
-                invalid_type_error: "Param 'user_id' must be a number",
-            })
-            .nullable(),
-        tag: z.string({
-            required_error: "Query string 'tag' is required",
-        }),
-    });
-
     let user_id = id ? parseInt(id) : null;
     const data = { user_id, tag };
 
-    const params = paramsSchema.safeParse(data);
+    const params = projectSchema.getByTag.safeParse(data);
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -126,25 +100,14 @@ export async function getProjectsByTag(req, res) {
 export async function deleteProject(req, res) {
     const { user_id, id: project_id } = req.params;
 
-    const paramsSchema = z.object({
-        user_id: z.number({
-            required_error: "Param 'user_id' is required",
-            invalid_type_error: "Param 'user_id' must be a number",
-        }),
-        project_id: z.number({
-            required_error: "Param 'project_id' is required",
-            invalid_type_error: "Param 'project_id' must be a number",
-        }),
-    });
-
     const data = {
         user_id: parseInt(user_id),
         project_id: parseInt(project_id),
     };
 
-    const params = paramsSchema.safeParse(data);
+    const params = projectSchema.getByUserIdAndId.safeParse(data);
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
@@ -159,31 +122,20 @@ export async function deleteProject(req, res) {
 export async function updateProject(req, res) {
     const { user_id, id: project_id } = req.params;
 
-    const paramsSchema = z.object({
-        user_id: z.number({
-            required_error: "Param 'user_id' is required",
-            invalid_type_error: "Param 'user_id' must be a number",
-        }),
-        project_id: z.number({
-            required_error: "Param 'project_id' is required",
-            invalid_type_error: "Param 'project_id' must be a number",
-        }),
-    });
-
     const data = {
         user_id: parseInt(user_id),
         project_id: parseInt(project_id),
     };
 
-    const params = paramsSchema.safeParse(data);
-    const body = projectSchema.safeParse(req.body);
+    const params = projectSchema.getByUserIdAndId.safeParse(data);
+    const body = projectSchema.createAndUpdate.safeParse(req.body);
     if (!params.success) {
-        const errors = params.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(params.error);
         return res.status(400).json({ errors });
     }
 
     if (!body.success) {
-        const errors = body.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(body.error);
         return res.status(400).json({ errors });
     }
 

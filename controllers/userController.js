@@ -1,6 +1,7 @@
-import userSchema from "../zodSchemas/userSchema.js";
+import userSchema from "../schemas/userSchema.js";
 import bcrypt from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
+import showZodErrors from "../helpers/showZodErrors.js";
 
 const prisma = new PrismaClient();
 
@@ -12,20 +13,20 @@ export async function addUser(req, res) {
         password: req.body.password,
         avatar_id: req.body.avatar_id,
     };
-    //validação dos formulários
 
+    // validate form
     const safeUser = userSchema.safeParse(user);
 
     if (!safeUser.success) {
-        const errors = safeUser.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(safeUser.error);
         return res.status(400).json({ errors });
     }
 
     try {
         if (safeUser.success) {
-            // Encripta a senha com bcrypt
+            // encrypt the password
             user.password = await bcrypt.hash(user.password, 10);
-            // Salva no banco
+            // save in database
             await prisma.users.create({ data: user });
             res.status(201).json("User successfully registered");
         }

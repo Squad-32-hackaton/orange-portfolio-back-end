@@ -4,33 +4,34 @@ import { PrismaClient } from "@prisma/client";
 import { UnauthorizedError } from "../helpers/api-errors.js";
 import passport from "passport";
 import { uuid } from "uuidv4";
-import loginSchema from "../zodSchemas/loginSchema.js";
+import loginSchema from "../schemas/loginSchema.js";
+import showZodErrors from "../helpers/showZodErrors.js";
 
 const prisma = new PrismaClient();
 
-// geração do token pra usuário com tempo de 24h
-function geraToken(id) {
+// user token generation with 24h expiration time
+function generateToken(id) {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
         expiresIn: "24h",
     });
 }
 
 export async function loginUserWithEmail(req, res) {
-    // Requisição para login com email e senha
+    // login with email and password
     const login = {
         email: req.body.email,
         password: req.body.password,
     };
 
-    //validação dos formulários
+    // validate form
     const safeLogin = loginSchema.safeParse(login);
 
     if (!safeLogin.success) {
-        const errors = safeLogin.error.issues.map((issue) => issue.message);
+        const errors = showZodErrors(safeLogin.error);
         return res.status(400).json({ errors });
     }
 
-    //consulta no banco se o email existeSim
+    // checks if the email already exists
     const user = await prisma.users.findFirst({
         where: { email: login.email },
     });
@@ -39,16 +40,15 @@ export async function loginUserWithEmail(req, res) {
         throw new UnauthorizedError("Invalid email or password!");
     }
 
-    // Verifica se senha do usuário é igual ao do banco
+    // checks if the password is correct
     const verifyPassword = await bcrypt.compare(login.password, user.password);
 
     if (!verifyPassword) {
         throw new UnauthorizedError("Invalid email or password!");
     }
 
-    // retorna o token
-
-    const token = geraToken(user.user_id);
+    // return token
+    const token = generateToken(user.user_id);
 
     return res.json(token);
 }
@@ -56,7 +56,7 @@ export async function loginUserWithEmail(req, res) {
 export async function loginUserWithGoogle(req, res) {
     return passport.authenticate(
         "google",
-        async function (err, googleUser, info, status) {
+        async function (err, googleUser, _, __) {
             if (err) {
                 throw new UnauthorizedError("Not allowed by user");
             }
@@ -64,7 +64,7 @@ export async function loginUserWithGoogle(req, res) {
                 throw new Error();
             }
 
-            // consulta no banco se o email existe
+            // checks if the email already exists
             const user = await prisma.users.findUnique({
                 where: { email: googleUser.email },
             });
@@ -81,12 +81,12 @@ export async function loginUserWithGoogle(req, res) {
                 });
 
                 if (newUser) {
-                    token = geraToken(newUser.user_id);
+                    token = generateToken(newUser.user_id);
                 } else {
                     throw new Error();
                 }
             } else {
-                token = geraToken(user.user_id);
+                token = generateToken(user.user_id);
             }
 
             return res.json({
@@ -96,7 +96,7 @@ export async function loginUserWithGoogle(req, res) {
     )(req, res, null);
 }
 
-// para o front pegar os dados do usuário
+// get user data
 export async function getProfile(req, res) {
     return res.json(req.user);
 }

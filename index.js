@@ -6,14 +6,16 @@ import fs from "fs";
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
-import userRoutes from "./routes/userRoutes.js";
-import projectRoutes from "./routes/projectRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
+import {
+    loginRoutes,
+    projectRoutes,
+    uploadRoutes,
+    userRoutes,
+} from "./routes/index.js";
 import db from "./database/db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json" assert { type: "json" };
-import loginRoutes from "./routes/loginRoutes.js";
 const app = express();
 
 app.use(bodyParser.json());

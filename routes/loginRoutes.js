@@ -10,10 +10,10 @@ import {
 
 const router = Router();
 
-// Rota de login
+// login route
 router.post("/login", loginUserWithEmail);
 
-//rotas para autenticação via Google
+// Google authentication route
 router.use(passport.initialize());
 router.get(
     "/auth/google",
@@ -25,11 +25,11 @@ router.get(
 
 router.get("/auth/google/callback", loginUserWithGoogle);
 
-router.get("/auth/google/failure", (req, res) => {
+router.get("/auth/google/failure", (_, res) => {
     res.send("Failed to authenticate..");
 });
 
-//rota de retorno do token para o front
+// get user data
 router.get("/login/profile", authMiddleware, getProfile);
 
 export default router;

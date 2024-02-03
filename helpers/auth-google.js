@@ -9,7 +9,7 @@ passport.use(
             callbackURL: process.env.REDIRECT_URL,
             passReqToCallback: true,
         },
-        function (request, accessToken, refreshToken, profile, done) {
+        function (_, __, ___, profile, done) {
             return done(null, profile);
         },
     ),

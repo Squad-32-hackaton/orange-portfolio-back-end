@@ -81,6 +81,8 @@ export async function getProjectById(project_id) {
         where: { project_id },
     });
 
+    if (!project) return false;
+
     return {
         project_id: project.project_id,
         user: {
