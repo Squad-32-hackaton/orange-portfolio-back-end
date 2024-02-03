@@ -80,9 +80,14 @@
             }
         },
         "/login/profile": {
-            "post": {
+            "get": {
                 "summary": "Dados do usuário logado",
                 "description": "Retorna algumas informações do usuário logado",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "dados retornados",
@@ -231,8 +236,7 @@
                                 "properties": {
                                     "file": {
                                         "type": "string",
-                                        "format": "binary",
-                                        "nullable": true
+                                        "format": "binary"
                                     }
                                 }
                             },
