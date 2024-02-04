@@ -9,10 +9,7 @@ const userSchema = z.object({
         .min(3, "Field 'name' contain at least 3 characters ")
         .max(50, "Field 'name' contain to maximum 50 characters ")
         .trim()
-        .regex(
-            /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/i,
-            "Field 'name' is invalid",
-        ),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/, "Field 'name' is invalid"),
 
     last_name: z
         .string({
@@ -22,10 +19,7 @@ const userSchema = z.object({
         .min(3, "Field 'last_name'contain at least 3 characters")
         .max(50, "Field 'last_name' contain to maximum 50 characters ")
         .trim()
-        .regex(
-            /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/i,
-            "Field 'last_name' is invalid",
-        ),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/, "Field 'last_name' is invalid"),
 
     email: z
         .string({
