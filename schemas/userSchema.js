@@ -3,57 +3,56 @@ import { z } from "zod";
 const userSchema = z.object({
     first_name: z
         .string({
-            required_error: "Field 'name' is required",
-            invalid_type_error: "Field 'name' must be a string",
+            required_error: "O campo 'nome' é obrigatório.",
+            invalid_type_error: "O campo 'nome' deve ser um texto.",
         })
-        .min(3, "Field 'name' contain at least 3 characters ")
-        .max(50, "Field 'name' contain to maximum 50 characters ")
+        .min(3, "O campo 'nome' deve conter no mínimo 3 caracteres.")
+        .max(50, "O campo 'nome' deve conter no máximo 50 caracteres.")
         .trim()
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/, "Field 'name' is invalid"),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/, "O campo 'nome' é inválido."),
 
     last_name: z
         .string({
-            required_error: "Field 'last_name' is required",
-            invalid_type_error: "Field 'last_name' must be a string",
+            required_error: "O campo 'sobrenome' é obrigatório.",
+            invalid_type_error: "O campo 'sobrenome' deve ser um texto.",
         })
-        .min(3, "Field 'last_name'contain at least 3 characters")
-        .max(50, "Field 'last_name' contain to maximum 50 characters ")
+        .min(3, "O campo 'sobrenome' deve conter no mínimo 3 caracteres.")
+        .max(50, "O campo 'sobrenome' deve conter no máximo 50 caracteres.")
         .trim()
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/, "Field 'last_name' is invalid"),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/, "O campo 'sobrenome' é inválido."),
 
     email: z
         .string({
-            required_error: "Field 'email' is required",
-            invalid_type_error: "Field 'email' must be a string",
+            required_error: "O campo 'email' é obrigatório.",
+            invalid_type_error: "O campo 'email' deve ser um texto.",
         })
         .email({
-            invalid_type_error: "This is not a valid email",
+            invalid_type_error: "Este não é um 'email' válido",
         })
-        .min(5, "Field 'email' contain at least 3 characters")
-        .max(50, "Field 'email' contain to maximum 50 characters ")
+        .max(50, "O campo 'email' deve conter no máximo 50 caracteres.")
         .trim()
         .toLowerCase(),
 
     password: z
         .string({
-            required_error: "Field 'password' is required",
+            required_error: "O campo 'senha' é obrigatório.",
         })
         .regex(
             /(?=.*[a-zA-Z])/,
-            "Field 'password' must contain at least one uppercase or lowercase letter",
+            "O campo 'senha' deve conter pelo menos uma letra",
         )
         .regex(
             /(?=.*[0-9])/,
-            "Field 'password' must contain at least one number",
+            "O campo 'senha' deve conter pelo menos um número",
         )
         .regex(/[0-9a-zA-Z@#$%^&+=!]/)
 
-        .min(8, "Field 'password' contain to minimun 8 characters ")
-        .max(50, "Field 'password' contain to maximum 50 characters "),
+        .min(8, "O campo 'senha' deve conter pelo menos 8 dígitos")
+        .max(50, "O campo 'senha' deve conter no máximo 50 dígitos"),
 
     avatar_id: z
         .number({
-            invalid_type_error: "Field 'avatar' must be a number",
+            invalid_type_error: "O campo 'avatar' deve ser um número",
         })
         .optional(),
 });

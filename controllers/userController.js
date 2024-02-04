@@ -28,14 +28,13 @@ export async function addUser(req, res) {
             user.password = await bcrypt.hash(user.password, 10);
             // save in database
             await prisma.users.create({ data: user });
-            res.status(201).json("User successfully registered");
+            res.status(201).json("Usuário registrado com sucesso!");
         }
     } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === "P2002") {
                 return res.status(409).json({
-                    message:
-                        "Email already exist, please use another email address",
+                    message: "Email já cadastrado!",
                 });
             }
         }

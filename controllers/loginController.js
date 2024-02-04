@@ -37,14 +37,14 @@ export async function loginUserWithEmail(req, res) {
     });
 
     if (!user) {
-        throw new UnauthorizedError("Invalid email or password!");
+        throw new UnauthorizedError("Email ou senha inválidos!");
     }
 
     // checks if the password is correct
     const verifyPassword = await bcrypt.compare(login.password, user.password);
 
     if (!verifyPassword) {
-        throw new UnauthorizedError("Invalid email or password!");
+        throw new UnauthorizedError("Email ou senha inválidos!");
     }
 
     // return token
@@ -58,7 +58,7 @@ export async function loginUserWithGoogle(req, res) {
         "google",
         async function (err, googleUser, _, __) {
             if (err) {
-                throw new UnauthorizedError("Not allowed by user");
+                throw new UnauthorizedError("Usuário não permitido!");
             }
             if (!googleUser) {
                 throw new Error();

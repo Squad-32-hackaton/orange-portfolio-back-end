@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export async function authMiddleware(req, _, next) {
     const { authorization } = req.headers;
     if (!authorization) {
-        throw new UnauthorizedError("Invalid email or password!");
+        throw new UnauthorizedError("Email ou senha inválidos!");
     }
     // remove string "bearer" from the token
     const token = authorization.split(" ")[1];
@@ -19,7 +19,7 @@ export async function authMiddleware(req, _, next) {
         const user = await prisma.users.findFirst({ where: { user_id } });
 
         if (!user) {
-            throw new UnauthorizedError("Invalid email or password!");
+            throw new UnauthorizedError("Email ou senha inválidos!");
         }
 
         const { password, createdAt, updatedAt, ...loggedUser } = user;
@@ -27,6 +27,6 @@ export async function authMiddleware(req, _, next) {
 
         next();
     } catch (error) {
-        throw new UnauthorizedError("Invalid token!");
+        throw new UnauthorizedError("Token Inválido!!");
     }
 }
