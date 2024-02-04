@@ -7,20 +7,11 @@ import {
     loginUserWithGoogle,
     getProfile,
 } from "../controllers/loginController.js";
-const cors = require("cors");
+
 const router = Router();
 
 // login route
 router.post("/login", loginUserWithEmail);
-
-router.options(
-    "*",
-    cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 }),
-);
-
-router.use(
-    cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 }),
-);
 
 // Google authentication route
 router.use(passport.initialize());
