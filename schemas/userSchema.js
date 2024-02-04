@@ -35,7 +35,7 @@ const userSchema = z.object({
         .email({
             invalid_type_error: "This is not a valid email",
         })
-        .min(5, "Field 'email'contain at least 3 characters")
+        .min(5, "Field 'email' contain at least 3 characters")
         .max(50, "Field 'email' contain to maximum 50 characters ")
         .trim()
         .toLowerCase(),
@@ -45,9 +45,15 @@ const userSchema = z.object({
             required_error: "Field 'password' is required",
         })
         .regex(
-            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$/,
-            "Field 'password' must contain at least one digit at least one lowercase letter at least uppercase letter must contain at least one capital",
+            /(?=.*[a-zA-Z])/,
+            "Field 'password' must contain at least one uppercase or lowercase letter",
         )
+        .regex(
+            /(?=.*[0-9])/,
+            "Field 'password' must contain at least one number",
+        )
+        .regex(/[0-9a-zA-Z@#$%^&+=!]/)
+
         .min(8, "Field 'password' contain to minimun 8 characters ")
         .max(50, "Field 'password' contain to maximum 50 characters "),
 
