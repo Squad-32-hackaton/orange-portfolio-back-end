@@ -9,11 +9,11 @@ export async function create(data) {
         return await prisma.projects.create({ data });
     } catch (error) {
         if (error.message.includes("field: `user_id`")) {
-            throw new NotFoundError(`User with id ${data.user_id} not found`);
+            throw new NotFoundError(`Usuário não encontrado`);
         }
 
         if (error.message.includes("field: `image_id`")) {
-            throw new NotFoundError(`Image with id ${data.image_id} not found`);
+            throw new NotFoundError(`Imagem não encontrada`);
         }
     }
 }
@@ -155,7 +155,7 @@ export async function deleteProject(user_id, project_id) {
         where: { user_id, project_id },
     });
 
-    if (!project) throw new NotFoundError("Project not found");
+    if (!project) throw new NotFoundError("Projeto não encontrado");
     return await prisma.projects.delete({ where: { project_id } });
 }
 
@@ -170,15 +170,15 @@ export async function updateProject(user_id, project_id, data) {
         });
     } catch (error) {
         if (error.message.includes("Record to update not found")) {
-            throw new NotFoundError(`Project with id ${project_id} not found`);
+            throw new NotFoundError(`Projeto não encontrado`);
         }
 
         if (error.message.includes("field: `user_id`")) {
-            throw new NotFoundError(`User with id ${data.user_id} not found`);
+            throw new NotFoundError(`Usuário não encontrado`);
         }
 
         if (error.message.includes("field: `image_id`")) {
-            throw new NotFoundError(`Image with id ${data.image_id} not found`);
+            throw new NotFoundError(`Imagem não encontrada`);
         }
     }
 }

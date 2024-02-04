@@ -28,7 +28,7 @@ export async function create(req, res) {
 
     await tagService.createMany(tagsData);
 
-    res.status(201).json({ message: "project created successfully" });
+    res.status(201).json({ message: "Projeto criado com sucesso!" });
 }
 
 export async function getProjects(req, res) {
@@ -66,7 +66,7 @@ export async function getProjectById(req, res) {
 
     const project = await projectService.getProjectById(params.data.project_id);
 
-    if (!project) throw new NotFoundError("Project not found");
+    if (!project) throw new NotFoundError("Projeto não encontrado");
 
     return res.json({ project });
 }
@@ -116,7 +116,7 @@ export async function deleteProject(req, res) {
         params.data.project_id,
     );
 
-    return res.json({ message: "project deleted successfully" });
+    return res.json({ message: "Projeto deletado com sucesso" });
 }
 
 export async function updateProject(req, res) {
@@ -160,5 +160,5 @@ export async function updateProject(req, res) {
     await tagService.deleteAll(project.project_id);
     await tagService.createMany(tagsData);
 
-    res.status(200).json({ message: "project updated successfully" });
+    res.status(200).json({ message: "Projeto atualizado com sucesso" });
 }
