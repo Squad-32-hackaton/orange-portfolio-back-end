@@ -13,18 +13,16 @@ const router = Router();
 // login route
 router.post("/login", loginUserWithEmail);
 
-router.options(
-    "*",
-    cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 }),
-);
-
-router.use(
-    cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 }),
-);
+cors(corsOptions);
+let corsOptions = {
+    origin: "http://localhost:5173",
+    optionsSuccessStatus: 200,
+};
 
 // Google authentication route
 router.use(passport.initialize());
 router.get(
+    cors(corsOptions),
     "/auth/google",
     passport.authenticate("google", {
         scope: ["email", "profile"],
